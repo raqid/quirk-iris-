@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  body{ background:#E9E1CE; }
+  ::selection{ background:#9E3413; color:#EFE8D7; }
+  @keyframes cs-rise{ from{ opacity:0; transform:translate(-50%,-50%) scale(.84); } to{ opacity:1; transform:translate(-50%,-50%) scale(1); } }
+  @keyframes cs-fade{ from{ opacity:0; } to{ opacity:1; } }
+  @keyframes cs-pulse{ 0%{ transform:translate(0,0); opacity:0; } 16%{ opacity:1; } 84%{ opacity:1; } 100%{ transform:translate(var(--tx),var(--ty)); opacity:0; } }
+</style>
+</helmet>
+
+<div style="position:relative; width:100%; background:#E9E1CE; color:#2A2118; font-family:'EB Garamond',Georgia,serif; overflow-x:hidden;">
+
+  <sc-if value="{{ grain }}" hint-placeholder-val="{{ true }}">
+    <div style="position:fixed; inset:0; pointer-events:none; z-index:80; mix-blend-mode:multiply; opacity:.05; background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;);"></div>
+  </sc-if>
+
+  <!-- ══════════════════ HERO + LIVE LOOKUP ══════════════════ -->
+  <section data-screen-label="Hero" style="position:relative; z-index:10;">
+
+    <header style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:26px clamp(22px,5vw,54px); flex-wrap:wrap; border-bottom:1px solid #D8CDB2;">
+      <div style="font-size:20px; letter-spacing:.34em; font-weight:500; text-indent:.34em; color:#241E15;">CONSILIVM</div>
+      <a href="#join" style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; text-decoration:none; padding:9px 18px; border:1.4px solid #2A2118; color:#2A2118;" style-hover="background:#2A2118; color:#E9E1CE;">Join &middot; $10/mo</a>
+    </header>
+
+    <div style="max-width:1080px; margin:0 auto; padding:clamp(44px,7vh,88px) clamp(22px,5vw,54px) clamp(40px,6vh,72px);">
+      <h1 style="font-size:clamp(34px,5.6vw,62px); font-weight:500; line-height:1.02; letter-spacing:-0.017em; color:#211B12; text-wrap:balance; max-width:15em;">What you know is worth more in another&rsquo;s hands.</h1>
+
+      <div style="margin-top:clamp(30px,5vh,46px); max-width:720px;">
+        <label style="display:block; font-family:'IBM Plex Mono',monospace; font-size:12.5px; letter-spacing:.04em; color:#5C5040; margin-bottom:12px;">Type your company. See what the network has for you.</label>
+        <form ref="{{ formRef }}" onSubmit="{{ onAnalyze }}" style="display:flex; gap:10px; flex-wrap:wrap;">
+          <input ref="{{ companyInputRef }}" type="text" placeholder="yourcompany.com  &mdash; or describe what you do" style="flex:1; min-width:240px; font-family:'IBM Plex Mono',monospace; font-size:15px; color:#2A2118; background:#EFE9DA; border:1.5px solid #B7AA8B; padding:16px 18px; outline:none;" style-focus="border-color:#9E3413;">
+          <button ref="{{ analyzeBtnRef }}" type="submit" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; padding:16px 26px; background:#2A2118; color:#E9E1CE; border:none; cursor:pointer; white-space:nowrap;" style-hover="background:#9E3413;">Search the network</button>
+        </form>
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8A7E66; margin-top:10px;">stripe.com &middot; an AI fashion wearable &middot; a materials lab</div>
+      </div>
+
+      <!-- status cascade -->
+      <div ref="{{ statusRef }}" style="margin-top:24px; display:flex; flex-direction:column; gap:11px;"></div>
+
+      <!-- radial graph -->
+      <div ref="{{ graphWrapRef }}" style="display:none; margin-top:34px;">
+        <div ref="{{ graphRef }}" style="position:relative; width:100%; height:min(84vw,680px); min-height:540px;"></div>
+        <div ref="{{ gateRef }}" style="display:none; margin-top:8px; padding:16px 20px; border:1px solid #C8BB9D; background:#E3DAC4; border-left:2px solid #9E3413; max-width:660px;">
+          <p style="font-size:16.5px; line-height:1.5; color:#3A3024;">A sketch from the outside. <span style="color:#9E3413;">Members get the agents that test each privately &mdash; and surface only the ones that hold.</span></p>
+          <a href="#join" style="display:inline-block; margin-top:14px; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; text-decoration:none; padding:11px 22px; background:#3F7350; color:#EFE8D7;" style-hover="background:#34603F;">Open the channels &middot; $10/mo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════ WHY YOU STAY ══════════════════ -->
+  <section data-screen-label="Access" style="position:relative; z-index:10; border-top:1px solid #C8BB9D; padding:clamp(64px,10vh,120px) clamp(22px,5vw,54px);">
+    <div style="max-width:1080px; margin:0 auto;">
+      <h2 style="font-size:clamp(26px,3.6vw,40px); font-weight:500; line-height:1.14; letter-spacing:-0.01em; max-width:18em;">A list of deals runs out. Access doesn&rsquo;t.</h2>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:clamp(28px,4vw,52px); margin-top:clamp(34px,5vh,52px); align-items:start;">
+
+        <!-- A · control exposure -->
+        <div>
+          <h3 style="font-size:20px; font-weight:500; line-height:1.2; margin-bottom:14px;">Control what&rsquo;s visible.</h3>
+
+          <div style="border:1px solid #C8BB9D; background:#EFE9DA;">
+            <div data-exprow="0" style="display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center; padding:13px 15px; border-bottom:1px solid #DAD0B7;">
+              <span style="font-size:16px; color:#2A2118;">Unpublished benchmark results</span>
+              <div style="display:flex; border:1px solid #C8BB9D;">
+                <button data-lvl="open" onClick="{{ onExposure }}" style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; padding:7px 11px; border:none; border-right:1px solid #C8BB9D; background:transparent; color:#5C5040; cursor:pointer;">Open</button>
+                <button data-lvl="cond" onClick="{{ onExposure }}" style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; padding:7px 11px; border:none; border-right:1px solid #C8BB9D; background:#9E3413; color:#F1E9D6; cursor:pointer;">Conditional</button>
+                <button data-lvl="priv" onClick="{{ onExposure }}" style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; padding:7px 11px; border:none; background:transparent; color:#5C5040; cursor:pointer;">Private</button>
+              </div>
+            </div>
+            <div data-exprow="1" style="display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center; padding:13px 15px; border-bottom:1px solid #DAD0B7;">
+              <span style="font-size:16px; color:#2A2118;">Vendor &amp; pricing intelligence</span>
+              <div style="display:flex; border:1px solid #C8BB9D;">
+                <button data-lvl="open" onClick="{{ onExposure }}" style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; padding:7px 11px; border:none; border-right:1px solid #C8BB9D; background:transparent; color:#5C5040; cursor:pointer;">Open</button>
+                <button data-lvl="cond" onClick="{{ onExposure }}" style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; padding:7px 11px; border:none; border-right:1px solid #C8BB9D; background:transparent; color:#5C5040; cursor:pointer;">Conditional</button>
+                <button data-lvl="priv" onClick="{{ onExposure }}" style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; padding:7px 11px; border:none; background:#2A2118; color:#E9E1CE; cursor:pointer;">Private</button>
+              </div>
+            </div>
+            <div data-exprow="2" style="display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center; padding:13px 15px; border-bottom:1px solid #DAD0B7;">
+              <span style="font-size:16px; color:#2A2118;">Customer outcome data</span>
+              <div style="display:flex; border:1px solid #C8BB9D;">
+                <button data-lvl="open" onClick="{{ onExposure }}" style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; padding:7px 11px; border:none; border-right:1px solid #C8BB9D; background:transparent; color:#5C5040; cursor:pointer;">Open</button>
+                <button data-lvl="cond" onClick="{{ onExposure }}" style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; padding:7px 11px; border:none; border-right:1px solid #C8BB9D; background:#9E3413; color:#F1E9D6; cursor:pointer;">Conditional</button>
+                <button data-lvl="priv" onClick="{{ onExposure }}" style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; padding:7px 11px; border:none; background:transparent; color:#5C5040; cursor:pointer;">Private</button>
+              </div>
+            </div>
+            <div data-exprow="3" style="display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center; padding:13px 15px;">
+              <span style="font-size:16px; color:#2A2118;">Internal playbooks &amp; how-tos</span>
+              <div style="display:flex; border:1px solid #C8BB9D;">
+                <button data-lvl="open" onClick="{{ onExposure }}" style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; padding:7px 11px; border:none; border-right:1px solid #C8BB9D; background:#2A2118; color:#E9E1CE; cursor:pointer;">Open</button>
+                <button data-lvl="cond" onClick="{{ onExposure }}" style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; padding:7px 11px; border:none; border-right:1px solid #C8BB9D; background:transparent; color:#5C5040; cursor:pointer;">Conditional</button>
+                <button data-lvl="priv" onClick="{{ onExposure }}" style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; padding:7px 11px; border:none; background:transparent; color:#5C5040; cursor:pointer;">Private</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- B · ask the network -->
+        <div>
+          <h3 style="font-size:20px; font-weight:500; line-height:1.2; margin-bottom:14px;">Ask. Reach who&rsquo;s done it.</h3>
+
+          <form ref="{{ askFormRef }}" onSubmit="{{ onAsk }}" style="display:flex; flex-direction:column; gap:10px;">
+            <input ref="{{ askInputRef }}" type="text" value="How do I get my software HIPAA-compliant fast?" style="font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:#2A2118; background:#EFE9DA; border:1.5px solid #B7AA8B; padding:14px 16px; outline:none;" style-focus="border-color:#9E3413;">
+            <button ref="{{ askBtnRef }}" type="submit" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; padding:13px 22px; background:#2A2118; color:#E9E1CE; border:none; cursor:pointer; align-self:flex-start;" style-hover="background:#9E3413;">Find who knows &rarr;</button>
+          </form>
+          <div ref="{{ askStatusRef }}" style="margin-top:16px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#5C5040;"></div>
+          <div ref="{{ askResultsRef }}" style="margin-top:16px; display:flex; flex-direction:column; gap:10px;"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════ JOIN ══════════════════ -->
+  <section id="join" data-screen-label="Join" style="position:relative; z-index:10; background:#211B12; color:#E7DFCB; padding:clamp(72px,12vh,140px) clamp(22px,5vw,54px);">
+    <div style="max-width:1080px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:clamp(40px,6vw,80px); align-items:start;">
+
+      <div>
+        <div style="display:flex; align-items:baseline; gap:12px;">
+          <span style="font-size:clamp(56px,9vw,92px); font-weight:500; line-height:1; letter-spacing:-0.02em; color:#F1E9D6;">$10</span>
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:#B5A788;">per month</span>
+        </div>
+        <p style="margin-top:20px; font-size:18px; line-height:1.5; color:#CFC5AC; max-width:26em;">One rate. Standing access &mdash; the map, the routing, the agents. Cancel anytime.</p>
+      </div>
+
+      <div style="border:1px solid #4A4030; padding:clamp(28px,4vw,40px); background:#28221A;">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#B5A788;">Request an invitation</div>
+
+        <form ref="{{ waitFormRef }}" onSubmit="{{ onJoin }}" style="margin-top:18px; display:flex; flex-direction:column; gap:10px;">
+          <input ref="{{ emailInputRef }}" type="email" required placeholder="you@company.com" style="font-family:'IBM Plex Mono',monospace; font-size:14px; color:#F1E9D6; background:#1C1710; border:1.4px solid #4A4030; padding:14px 16px; outline:none;" style-focus="border-color:#C87A55;">
+          <button type="submit" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; padding:15px 24px; background:#C87A55; color:#211B12; border:none; cursor:pointer; font-weight:500;" style-hover="background:#DE8E67;">Request my seat &rarr;</button>
+        </form>
+
+        <div ref="{{ waitDoneRef }}" style="display:none; margin-top:24px; border-top:1px solid #4A4030; padding-top:22px;">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#7FA88A;">You&rsquo;re on the list</div>
+          <p style="margin-top:12px; font-size:16.5px; line-height:1.5; color:#DED4BC;">We&rsquo;ll reach back the moment a seat &mdash; and your first exchange &mdash; is ready.</p>
+        </div>
+
+
+      </div>
+
+    </div>
+
+    <div style="max-width:1080px; margin:clamp(56px,8vh,90px) auto 0; padding-top:28px; border-top:1px solid #3A3226; display:flex; justify-content:space-between; align-items:baseline; gap:16px; flex-wrap:wrap;">
+      <span style="font-size:18px; letter-spacing:.28em; text-indent:.28em; color:#B5A788;">CONSILIVM</span>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:960},&quot;grain&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Texture&quot;}}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    ['formRef','companyInputRef','analyzeBtnRef','statusRef','graphWrapRef','graphRef','gateRef',
+     'askFormRef','askInputRef','askBtnRef','askStatusRef','askResultsRef',
+     'waitFormRef','emailInputRef','waitDoneRef'].forEach(k => this[k] = React.createRef());
+    this.busy = false; this.asking = false; this._oppCards=[];
+  }
+
+  renderVals(){
+    return {
+      grain: this.props.grain !== false,
+      formRef:this.formRef, companyInputRef:this.companyInputRef, analyzeBtnRef:this.analyzeBtnRef,
+      statusRef:this.statusRef, graphWrapRef:this.graphWrapRef, graphRef:this.graphRef, gateRef:this.gateRef,
+      askFormRef:this.askFormRef, askInputRef:this.askInputRef, askBtnRef:this.askBtnRef,
+      askStatusRef:this.askStatusRef, askResultsRef:this.askResultsRef,
+      waitFormRef:this.waitFormRef, emailInputRef:this.emailInputRef, waitDoneRef:this.waitDoneRef,
+      onAnalyze:(e)=>this.analyze(e),
+      onExposure:(e)=>this.setExposure(e),
+      onAsk:(e)=>this.ask(e),
+      onJoin:(e)=>this.join(e),
+    };
+  }
+  componentDidMount(){ try{ this.buildMesh(); }catch(e){} }
+  componentWillUnmount(){ clearTimeout(this._statusTimer); clearTimeout(this._graphSafety); cancelAnimationFrame(this._graphRaf); }
+  esc(s){ return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+  /* ───── exposure dials ───── */
+  setExposure(e){
+    const btn=e.currentTarget, row=btn.closest('[data-exprow]');
+    const lvl=btn.dataset.lvl;
+    [...row.querySelectorAll('button[data-lvl]')].forEach(b=>{
+      const on=b===btn;
+      const dark = on && lvl==='priv';
+      b.style.background = on ? (lvl==='priv' ? '#2A2118' : (lvl==='open' ? '#2A2118' : '#9E3413')) : 'transparent';
+      b.style.color = on ? (lvl==='cond' ? '#F1E9D6' : '#E9E1CE') : '#5C5040';
+    });
+  }
+
+  /* ───── status ───── */
+  statusRow(host,text,done){
+    const el=document.createElement('div');
+    el.style.cssText='display:flex; gap:12px; align-items:baseline; font-family:\'IBM Plex Mono\',monospace; font-size:12.5px; color:'+(done?'#3F7350':'#5C5040')+'; opacity:0; animation:cs-fade .4s ease forwards;';
+    el.innerHTML='<span style="color:'+(done?'#3F7350':'#9E3413')+';">'+(done?'\u2713':'\u203A')+'</span><span></span>';
+    el.lastChild.textContent=text; host.appendChild(el); return el;
+  }
+
+  /* ───── company lookup ───── */
+  async analyze(e){
+    if(e) e.preventDefault();
+    if(this.busy) return; this.busy=true;
+    const input=(this.companyInputRef.current.value||'').trim();
+    const btn=this.analyzeBtnRef.current;
+    btn.disabled=true; btn.textContent='Reading\u2026'; btn.style.opacity='.6';
+    this.statusRef.current.innerHTML='';
+    this.gateRef.current.style.display='none';
+    const lines=['Reading public signals \u2014 filings, hiring, what you ship\u2026',
+      'Modeling what you likely hold, lack, and quietly under-use\u2026',
+      'Tracing where a hidden, mutually-beneficial trade could exist\u2026'];
+    let i=0; const tick=()=>{ if(i<lines.length){ this.statusRow(this.statusRef.current,lines[i++]); this._statusTimer=setTimeout(tick,720); } };
+    tick();
+    let result=null;
+    try { result = await this.callModel(input); } catch(err){ result=null; }
+    if(!result) result=this.fallback(input);
+    await new Promise(r=>setTimeout(r, Math.max(300, lines.length*720)));
+    this.statusRow(this.statusRef.current,'A sketch of hidden exchanges where both sides could gain \u2014 inferred, not a competitor among them.', true);
+    this.runSearch(result);
+    btn.disabled=false; btn.textContent='Search the network'; btn.style.opacity='1';
+    this.busy=false;
+  }
+  async callModel(input){
+    let res;
+    try{ res=await fetch('/api/network/company',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({input:input||''})}); }
+    catch(e){ return null; }
+    if(!res.ok) return null;
+    let obj=null; try{ obj=await res.json(); }catch(e){ return null; }
+    if(!obj||!obj.nodes||!obj.nodes.length) return null;
+    obj.profile=(obj.profile||input||'your company').toString();
+    obj.nodes=obj.nodes.slice(0,6).map(n=>({ count:Math.max(1,parseInt(n.count,10)||2), offer:(n.offer||n.opportunity||'can help').toString() }));
+    return obj;
+  }
+  fallback(input){
+    const p = input ? input.replace(/^https?:\/\//,'').replace(/\/.*$/,'') : 'an AI fashion wearable';
+    return { profile:p, nodes:[
+      {count:3, offer:'have shipped consumer wearables at scale'},
+      {count:4, offer:'can warm-intro contract manufacturers'},
+      {count:1, offer:'runs a content-automation pipeline'},
+      {count:2, offer:'hold biomechanics datasets worth licensing'},
+      {count:5, offer:'cleared FCC/CE and will share the playbook'},
+      {count:6, offer:'want early hardware for their retail channel'},
+    ]};
+  }
+
+  /* ───── build the network mesh once, on load (always visible, dormant) ───── */
+  buildMesh(){
+    const host=this.graphRef.current; if(!host) return;
+    this.graphWrapRef.current.style.display='block';
+    host.innerHTML=''; this._oppCards=[];
+    const W=host.clientWidth, H=host.clientHeight, CX=W/2, CY=H/2;
+    const dpr=Math.min(2, window.devicePixelRatio||1);
+    const cv=document.createElement('canvas');
+    cv.width=W*dpr; cv.height=H*dpr; cv.style.cssText='position:absolute; inset:0; width:100%; height:100%; pointer-events:none;';
+    host.appendChild(cv); const ctx=cv.getContext('2d');
+    const Rmax=Math.min(W*0.5,H*0.5)*0.94;
+
+    const nodes=[{x:CX,y:CY,r0:0,center:true}];
+    const rings=[[0.20,7],[0.33,11],[0.46,13],[0.62,15],[0.78,15],[0.93,12]];
+    rings.forEach((rc,ri)=>{ const rf=rc[0], cnt=rc[1];
+      for(let k=0;k<cnt;k++){ const a=(k/cnt)*Math.PI*2 + ri*0.5 + (Math.random()-0.5)*0.28; const rr=Rmax*rf*(0.9+Math.random()*0.18);
+        nodes.push({x:CX+Math.cos(a)*rr, y:CY+Math.sin(a)*rr, r0:1.3+Math.random()*1.1, isOpp:false}); } });
+    const oppIdx=[], oppN=6;
+    for(let i=0;i<oppN;i++){ const a=-Math.PI/2 + (i/oppN)*Math.PI*2 + 0.14; const rr=Rmax*(0.55 + (i%2)*0.06);
+      nodes.push({x:CX+Math.cos(a)*rr, y:CY+Math.sin(a)*rr, r0:3.4, isOpp:true, data:null}); oppIdx.push(nodes.length-1); }
+
+    const edges=[], seen=new Set();
+    const dist=(i,j)=>Math.hypot(nodes[i].x-nodes[j].x, nodes[i].y-nodes[j].y);
+    const rad=(i)=>Math.hypot(nodes[i].x-CX, nodes[i].y-CY);
+    const addEdge=(i,j)=>{ if(i===j) return; const a=Math.min(i,j),b=Math.max(i,j),key=a+'-'+b; if(seen.has(key)) return; seen.add(key); edges.push({a,b,len:dist(a,b)}); };
+    for(let i=1;i<nodes.length;i++){ const d=[]; for(let j=0;j<nodes.length;j++){ if(j!==i) d.push([j,dist(i,j)]); } d.sort((p,q)=>p[1]-q[1]);
+      let c=0; for(const pr of d){ if(c>=3) break; if(pr[1]<Rmax*0.44){ addEdge(i,pr[0]); c++; } }
+      const inward=d.find(pr=>rad(pr[0])<rad(i)-1); if(inward) addEdge(i,inward[0]); }
+    for(let i=1;i<nodes.length;i++){ if(rad(i)<Rmax*0.30) addEdge(0,i); }
+
+    const adj=nodes.map(()=>[]); edges.forEach((e,ei)=>{ adj[e.a].push([e.b,ei]); adj[e.b].push([e.a,ei]); });
+    const SPEED=0.005; nodes.forEach(nd=>nd.act=Infinity); nodes[0].act=0; const pq=[[0,0]];
+    while(pq.length){ pq.sort((p,q)=>p[0]-q[0]); const top=pq.shift(); const dd=top[0], u=top[1]; if(dd>nodes[u].act) continue;
+      for(const vv of adj[u]){ const v=vv[0], ei=vv[1]; const w=edges[ei].len*SPEED+0.05; const ndd=dd+w; if(ndd<nodes[v].act){ nodes[v].act=ndd; pq.push([ndd,v]); } } }
+    let maxAct=0; nodes.forEach(nd=>{ if(isFinite(nd.act)) maxAct=Math.max(maxAct,nd.act); }); if(!maxAct) maxAct=2;
+    nodes.forEach(nd=>{ if(!isFinite(nd.act)) nd.act=maxAct; });
+    edges.forEach(e=>{ if(nodes[e.a].act<=nodes[e.b].act){ e.s=e.a; e.d=e.b; } else { e.s=e.b; e.d=e.a; } e.t0=nodes[e.s].act; e.tr=Math.max(0.45,e.len*SPEED); });
+
+    const you=document.createElement('div');
+    you.style.cssText='position:absolute; left:'+CX+'px; top:'+CY+'px; transform:translate(-50%,-50%); text-align:center; z-index:4;';
+    you.innerHTML='<div style="width:88px;height:88px;border-radius:50%;border:1.5px solid #9E3413;background:#E9E1CE;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 7px rgba(158,52,19,.06);margin:0 auto;"><div style="font-family:\'IBM Plex Mono\',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#9E3413;">You</div></div><div class="cs-desc" style="display:inline-block;margin-top:12px;background:#EFE9DA;border:1px solid #C8BB9D;padding:6px 11px;box-shadow:0 4px 14px rgba(42,33,24,.16);opacity:0;transition:opacity .5s ease;"><div style="font-family:\'IBM Plex Mono\',monospace;font-size:7.5px;letter-spacing:.13em;text-transform:uppercase;color:#8A7E66;margin-bottom:3px;">Your company</div><div class="cs-desctext" style="font-size:12.5px;font-style:italic;color:#211B12;max-width:172px;line-height:1.22;">&mdash;</div></div>';
+    host.appendChild(you);
+    this._youDesc=you.querySelector('.cs-desc'); this._youDescText=you.querySelector('.cs-desctext');
+
+    const paint=(t)=>{
+      ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H); ctx.lineWidth=1;
+      for(const e of edges){ const A=nodes[e.a],B=nodes[e.b],S=nodes[e.s],D=nodes[e.d];
+        ctx.strokeStyle='rgba(150,132,104,0.18)'; ctx.beginPath(); ctx.moveTo(A.x,A.y); ctx.lineTo(B.x,B.y); ctx.stroke();
+        const p=Math.max(0,Math.min(1,(t-e.t0)/e.tr));
+        if(p>=1){ const since=t-(e.t0+e.tr); const a=0.42*Math.exp(-since/1.6)+0.07; ctx.strokeStyle='rgba(158,52,19,'+a.toFixed(3)+')'; ctx.beginPath(); ctx.moveTo(A.x,A.y); ctx.lineTo(B.x,B.y); ctx.stroke(); }
+        else if(p>0){ const hx=S.x+(D.x-S.x)*p, hy=S.y+(D.y-S.y)*p; ctx.strokeStyle='rgba(158,52,19,0.6)'; ctx.beginPath(); ctx.moveTo(S.x,S.y); ctx.lineTo(hx,hy); ctx.stroke(); ctx.fillStyle='rgba(158,52,19,0.95)'; ctx.beginPath(); ctx.arc(hx,hy,2.4,0,6.2832); ctx.fill(); } }
+      for(const nd of nodes){ if(nd.center) continue;
+        if(nd.isOpp){ const dt=t-nd.act;
+          if(dt<=0){ ctx.fillStyle='rgba(120,105,80,0.4)'; ctx.beginPath(); ctx.arc(nd.x,nd.y,1.6,0,6.2832); ctx.fill(); continue; }
+          const b=Math.max(0,Math.min(1,dt/0.9)); const flash=Math.max(0,1-dt/1.1); const r=nd.r0 + b*2 + flash*3;
+          ctx.save(); ctx.shadowColor='rgba(158,52,19,0.6)'; ctx.shadowBlur=11*b;
+          ctx.fillStyle='rgba(158,52,19,'+(0.55+0.45*b)+')';
+          ctx.beginPath(); ctx.arc(nd.x,nd.y,r,0,6.2832); ctx.fill();
+          ctx.restore(); ctx.strokeStyle='rgba(158,52,19,'+(0.5*b)+')'; ctx.lineWidth=1.2; ctx.beginPath(); ctx.arc(nd.x,nd.y,r+4+flash*5,0,6.2832); ctx.stroke(); ctx.lineWidth=1; }
+        else { ctx.fillStyle='rgba(120,105,80,0.4)'; ctx.beginPath(); ctx.arc(nd.x,nd.y,nd.r0,0,6.2832); ctx.fill();
+          const since=t-nd.act; if(since>0){ const a=0.7*Math.exp(-since/1.3); ctx.fillStyle='rgba(158,52,19,'+a.toFixed(3)+')'; ctx.beginPath(); ctx.arc(nd.x,nd.y,nd.r0+1.2,0,6.2832); ctx.fill(); } } }
+      for(const o of (this._oppCards||[])){ if(o.shown){ ctx.strokeStyle='rgba(158,52,19,0.28)'; ctx.beginPath(); ctx.moveTo(o.nx,o.ny); ctx.lineTo(o.cx,o.cy); ctx.stroke(); } }
+    };
+    this.mesh={host,ctx,W,H,CX,CY,dpr,nodes,edges,oppIdx,maxAct,paint};
+    paint(-1);
+  }
+
+  /* ───── on submit: populate description, then propagate the search ───── */
+  runSearch(res){
+    const m=this.mesh; if(!m){ return; }
+    cancelAnimationFrame(this._graphRaf); clearTimeout(this._graphSafety);
+    if(this._youDescText) this._youDescText.textContent=res.profile;
+    if(this._youDesc) this._youDesc.style.opacity='1';
+    (this._oppCards||[]).forEach(o=>{ if(o.el&&o.el.remove) o.el.remove(); }); this._oppCards=[];
+    this.gateRef.current.style.display='none';
+    m.oppIdx.forEach((ni,i)=>{
+      const nd=m.nodes[ni]; nd.data=res.nodes[i%res.nodes.length];
+      const ang=Math.atan2(nd.y-m.CY, nd.x-m.CX);
+      let lx=nd.x+Math.cos(ang)*64, ly=nd.y+Math.sin(ang)*64;
+      lx=Math.max(108,Math.min(m.W-108,lx)); ly=Math.max(52,Math.min(m.H-52,ly));
+      const card=document.createElement('div');
+      card.style.cssText='position:absolute; left:'+lx+'px; top:'+ly+'px; width:198px; opacity:0; transform:translate(-50%,-50%) scale(.82); transition:opacity .45s ease, transform .45s ease; z-index:3;';
+      card.innerHTML='<div style="background:#EFE9DA;border:1px solid #C8BB9D;border-top:2px solid #9E3413;padding:9px 12px;box-shadow:0 6px 20px rgba(42,33,24,.12);">'
+        +'<div style="display:flex;align-items:baseline;gap:8px;"><span style="font-size:21px;font-weight:500;line-height:1;color:#9E3413;">'+this.esc(String(nd.data.count))+'</span>'
+        +'<span style="font-size:12px;line-height:1.32;color:#2A2118;">'+this.esc(nd.data.offer)+'</span></div></div>';
+      m.host.appendChild(card);
+      this._oppCards.push({el:card, ni, shown:false, cx:lx, cy:ly, nx:nd.x, ny:nd.y});
+    });
+    let gateShown=false; const maxAct=m.maxAct; const startT=performance.now();
+    const revealAt=(t)=>{
+      for(const o of this._oppCards){ if(!o.shown && t>=m.nodes[o.ni].act+0.1){ o.shown=true; o.el.style.opacity='1'; o.el.style.transform='translate(-50%,-50%) scale(1)'; } }
+      if(!gateShown && t>=maxAct+0.7){ gateShown=true; this.gateRef.current.style.display='block'; }
+    };
+    const loop=(now)=>{ const t=(now-startT)/1000; m.paint(t); revealAt(t); if(t<maxAct+2.6) this._graphRaf=requestAnimationFrame(loop); };
+    this._graphRaf=requestAnimationFrame(loop);
+    this._graphSafety=setTimeout(()=>{ m.paint(maxAct+1.4); revealAt(maxAct+1.4); }, (maxAct+1.9)*1000);
+  }
+  countUp(el,to,delay){
+    if(!el) return; const dur=750; let st=null;
+    const step=(now)=>{ if(st===null) st=now; const t=now-st-(delay||0);
+      if(t<=0){ requestAnimationFrame(step); return; }
+      const k=Math.min(1,t/dur); el.textContent=Math.round(to*(1-Math.pow(1-k,2)));
+      if(k<1) requestAnimationFrame(step); else el.textContent=to; };
+    requestAnimationFrame(step);
+  }
+
+  /* ───── ask the network ───── */
+  async ask(e){
+    if(e) e.preventDefault();
+    if(this.asking) return; this.asking=true;
+    const q=(this.askInputRef.current.value||'').trim();
+    const btn=this.askBtnRef.current;
+    btn.disabled=true; btn.style.opacity='.6';
+    this.askResultsRef.current.innerHTML='';
+    this.askStatusRef.current.textContent='\u203A Routing your question through the network\u2026';
+    let people=null;
+    try { people=await this.callAsk(q); } catch(err){ people=null; }
+    if(!people) people=this.askFallback();
+    this.askStatusRef.current.textContent='\u2713 '+people.length+' members have solved this and will talk.';
+    this.askStatusRef.current.style.color='#3F7350';
+    people.forEach((p,i)=>{
+      const el=document.createElement('div');
+      el.style.cssText='border:1px solid #C8BB9D;border-left:2px solid #3F7350;background:#EFE9DA;padding:12px 14px;opacity:0;transform:translateY(6px);transition:opacity .4s ease '+(i*0.12)+'s, transform .4s ease '+(i*0.12)+'s;';
+      el.innerHTML='<div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap;">'
+        +'<span style="font-size:16px;color:#211B12;font-weight:500;">'+this.esc(p.role)+'</span>'
+        +'<span style="font-family:\'IBM Plex Mono\',monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#8A7E66;">'+this.esc(p.company)+'</span></div>'
+        +'<div style="margin-top:6px;font-size:14px;line-height:1.4;color:#3A3024;">'+this.esc(p.solved)+'</div>'
+        +'<div style="margin-top:7px;font-family:\'IBM Plex Mono\',monospace;font-size:10.5px;color:#3F7350;">'+this.esc(p.open_to)+'</div>';
+      this.askResultsRef.current.appendChild(el);
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{ el.style.opacity='1'; el.style.transform='none'; }));
+      setTimeout(()=>{ el.style.opacity='1'; el.style.transform='none'; }, 60+i*120);
+    });
+    btn.disabled=false; btn.style.opacity='1';
+    this.asking=false;
+  }
+  async callAsk(q){
+    let res;
+    try{ res=await fetch('/api/network/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q||''})}); }
+    catch(e){ return null; }
+    if(!res.ok) return null;
+    let obj=null; try{ obj=await res.json(); }catch(e){ return null; }
+    if(!obj||!obj.people||!obj.people.length) return null;
+    return obj.people.slice(0,3).map(p=>({ role:(p.role||'A member').toString(), company:(p.company||'').toString(), solved:(p.solved||'').toString(), open_to:(p.open_to||'open to talk').toString() }));
+  }
+  askFallback(){
+    return [
+      {role:'Head of Security & Compliance', company:'Series-B health SaaS', solved:'Took a greenfield product from zero to HIPAA + SOC 2 in eleven weeks with a fractional team.', open_to:'open to an advice call'},
+      {role:'Compliance Lead', company:'Telehealth platform', solved:'Built the BAA workflow and audit trail that cleared their first hospital customer.', open_to:'open to trade playbooks'},
+      {role:'Fractional CISO', company:'Healthcare consultancy', solved:'Has run 20+ HIPAA readiness sprints and keeps a reusable control map.', open_to:'open to a paid intro'},
+    ];
+  }
+
+  /* ───── waitlist ───── */
+  join(e){ if(e) e.preventDefault(); this.waitFormRef.current.style.display='none'; this.waitDoneRef.current.style.display='block'; }
+}
+</script>
+<template id="__bundler_thumbnail">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" fill="#E9E1CE"/>
+  <g stroke="#9E3413" stroke-width="0.8" opacity="0.5">
+    <line x1="50" y1="50" x2="34" y2="34"/><line x1="50" y1="50" x2="70" y2="36"/>
+    <line x1="50" y1="50" x2="66" y2="66"/><line x1="50" y1="50" x2="33" y2="64"/>
+    <line x1="34" y1="34" x2="70" y2="36"/><line x1="66" y1="66" x2="33" y2="64"/>
+  </g>
+  <g fill="#9E3413">
+    <circle cx="34" cy="34" r="3"/><circle cx="70" cy="36" r="3"/>
+    <circle cx="66" cy="66" r="3"/><circle cx="33" cy="64" r="3"/>
+  </g>
+  <circle cx="50" cy="50" r="8" fill="#E9E1CE" stroke="#9E3413" stroke-width="1.4"/>
+</svg>
+</template>
+</body>
+</html>

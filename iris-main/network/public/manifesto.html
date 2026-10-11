@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<title>Information Asymmetry — the Quirk thesis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#E9E1CE; --panel:#EAE2CD; --tint:#E3DAC4; --dealbg:#EAE2CD;
+    --ink:#2A2118; --ink-d:#241E15; --soft:#3A3024; --muted:#5C5040; --faint:#8A7E66;
+    --hair:#C8BB9D; --hair-l:#D8CDB2; --hair-g:#C8BB9D;
+    --verm:#9E3413; --green:#2A2118; --green-h:#241E15; --pass:#B7AE94;
+    --serif:"EB Garamond",Georgia,serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+    --hand-size:clamp(2.4px,0.5vw,5px);
+  }
+  *{box-sizing:border-box;}
+  button{border-radius:0;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--ground); color:var(--ink);
+       font-family:var(--serif); font-size:20px; line-height:1.62; -webkit-font-smoothing:antialiased;}
+  .grain{position:fixed; inset:0; pointer-events:none; mix-blend-mode:multiply; opacity:.05; z-index:50;
+         background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
+  ::selection{background:var(--verm); color:#EFE8D7;}
+  .col{max-width:660px; margin:0 auto; padding:clamp(64px,11vh,128px) clamp(26px,6vw,40px) clamp(96px,14vh,150px);}
+
+  /* hero — the two hands reaching for each other */
+  .hero{position:fixed; inset:0; z-index:40; background:var(--ground); overflow:hidden; will-change:opacity; pointer-events:none;}
+  .hero-stage{position:absolute; inset:0;}
+  .hand{position:absolute; top:50%; margin:0; white-space:pre; font-family:var(--mono);
+        font-size:var(--hand-size); line-height:1; color:var(--ink); will-change:transform;}
+  .hand.left{right:50%; transform:translate(0,-50%);}
+  .hand.right{left:50%; transform:translate(0,-50%);}
+  .hero-title{position:absolute; top:11%; left:50%; transform:translateX(-50%);
+              font-family:var(--serif); font-weight:500; font-size:clamp(28px,5vw,46px);
+              letter-spacing:-0.01em; color:var(--ink); margin:0; z-index:2; text-align:center;
+              background:var(--ground); padding:2px 18px; white-space:nowrap;}
+  .hero-title .off{display:inline-block; transform:translateY(0.18em);}
+  .hero-spacer{height:100vh;}
+
+  h1{font-weight:500; font-size:clamp(28px,4.4vw,38px); line-height:1.18; letter-spacing:-0.01em;
+     margin:0 0 clamp(40px,6vh,60px);}
+  h2{font-weight:500; font-size:clamp(21px,2.6vw,25px); line-height:1.3; margin:clamp(30px,4vh,40px) 0 .4em;}
+  p{margin:0 0 1.05em;}
+  em{font-style:normal;}
+  .num{color:var(--verm); font-size:.82em; letter-spacing:.08em; font-weight:500; margin-right:.55em;}
+  .verm{color:var(--verm);}
+  .aside{color:var(--muted);}
+  .movement{margin-top:clamp(46px,8vh,76px);}
+  .lead{font-size:20px;}
+  .close{font-size:clamp(23px,3.2vw,30px); font-weight:500; text-wrap:pretty; color:var(--ink-d);}
+  .close-it{color:var(--verm); font-size:clamp(20px,2.6vw,26px);}
+
+  /* progressive reveal */
+  .step{display:none; opacity:0; transform:translateY(8px);}
+  .step.shown{display:block; animation:rise .6s ease forwards;}
+  @keyframes rise{to{opacity:1; transform:none;}}
+  .reveal-wrap{display:flex; justify-content:center; margin:clamp(30px,5vh,52px) 0 0;}
+  .reveal{font-family:var(--serif); font-size:17px; font-weight:500; letter-spacing:.01em;
+          color:var(--ink); background:transparent; border:1.5px solid var(--muted);
+          padding:8px 20px; cursor:pointer; transition:color .2s,border-color .2s,background .2s;}
+  .reveal:hover{background:var(--tint); border-color:var(--ink);}
+  .reveal .arr{display:inline; font-size:14px; margin-left:.4em; color:var(--muted);}
+  .reveal.play{color:var(--ground); background:var(--ink); border-color:var(--ink);}
+  .reveal.play:hover{background:var(--ink-d); color:var(--ground); border-color:var(--ink-d);}
+
+  /* ===== the scripted scenario ===== */
+  figure{margin:clamp(30px,5vh,52px) 0 0;}
+  .scard{padding:18px 20px; background:var(--panel);
+         font-size:17px; line-height:1.6; color:var(--soft);}
+  .scard b{font-weight:600;}
+  .meters{display:grid; grid-template-columns:1.4fr .85fr 1.5fr; gap:1px;
+          background:var(--hair); border:1px solid var(--hair); margin-top:18px;}
+  .cell{background:var(--panel); padding:13px 14px;}
+  .clabel{font-family:var(--serif); font-size:15px; color:var(--muted); margin-bottom:7px;}
+  .mval{font-family:var(--serif); font-size:25px; font-weight:500; line-height:1; color:var(--ink); transition:color .6s ease;}
+  .mval .pct{font-size:.7em;}
+  .mval.neg{color:var(--verm);}
+  .track{height:3px; background:var(--hair-l); margin-top:9px;}
+  .fill{height:100%; width:100%; background:var(--ink); transition:width .6s ease, background .6s ease;}
+  .fill.neg{background:var(--verm);}
+  .vrow{display:flex; justify-content:space-between; align-items:baseline;}
+  .vrow + .vrow{margin-top:6px;}
+  .vlab{font-family:var(--serif); font-size:15px; color:var(--muted);}
+  .vval{font-family:var(--serif); font-size:19px; font-weight:500; color:var(--faint); transition:color .4s ease;}
+  .vval.gain{color:var(--green);}
+
+  #cascade{display:flex; flex-direction:column; gap:13px; min-height:24px; margin-top:22px;}
+  .beat{border-left:2px solid var(--hair); padding-left:14px; font-size:16.5px; line-height:1.5; color:var(--soft);
+        opacity:0; transform:translateY(6px); transition:opacity .45s ease, transform .45s ease;}
+  .beat.in{opacity:1; transform:none;}
+  .beat.bad{border-left-color:var(--verm); color:var(--ink);}
+  .beat.good{border-left-color:var(--green); color:var(--ink);}
+  .beat strong{font-weight:600;}
+
+  .choice{display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:24px;}
+  .ymove{font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint);}
+  .b-choice{font-family:var(--serif); font-size:17px; font-weight:500; letter-spacing:.01em; padding:8px 20px;
+            border:1.5px solid var(--muted); background:transparent; color:var(--ink); cursor:pointer;}
+  .b-choice:hover{background:var(--tint);}
+
+  .deploy{border-top:1px solid var(--hair); padding-top:20px; margin-top:24px;}
+  .deploy p{font-size:17px; color:var(--soft); margin-bottom:14px;}
+  .b-deploy{font-family:var(--serif); font-size:17px; font-weight:500; letter-spacing:.01em; padding:8px 20px;
+            border:1.5px solid var(--green); background:transparent; color:var(--green); cursor:pointer;}
+  .b-deploy:hover{background:var(--dealbg);}
+
+  .deal{border:1px solid var(--green); background:var(--dealbg); margin-top:24px;}
+  .deal-h{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--green);
+          border-bottom:1px solid var(--hair-g); padding:12px 18px;}
+  .deal-b{padding:18px 18px 20px;}
+  .deal-b p{font-size:17px; color:var(--soft);}
+  .deal-b b{font-weight:600;}
+  .ledger{font-family:var(--mono); font-size:13.5px; margin:14px 0;}
+  .lrow{display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid var(--hair-g);}
+  .lrow.net{border-bottom:none;}
+  .lrow .neg{color:var(--verm);} .lrow .net-v{color:var(--green); font-weight:500;}
+  .dnote{font-size:14px; color:var(--muted); margin-top:6px;}
+  .deal-btns{display:flex; gap:12px; margin-top:16px;}
+  .b-buy{font-family:var(--serif); font-size:17px; font-weight:500; letter-spacing:.01em; padding:9px 22px;
+         border:1.5px solid var(--green); background:var(--green); color:#EFE8D7; cursor:pointer;}
+  .b-buy:hover{background:var(--green-h);}
+  .b-pass{font-family:var(--serif); font-size:17px; font-weight:500; letter-spacing:.01em; padding:9px 22px;
+          border:1.5px solid var(--pass); background:transparent; color:var(--muted); cursor:pointer;}
+
+  .b-reset{display:block; font-family:var(--serif); font-size:15px; font-weight:500; letter-spacing:.01em; padding:7px 18px;
+           border:1px solid var(--muted); background:transparent; color:var(--muted); cursor:pointer; margin-top:20px;}
+  figcaption{color:var(--muted); font-size:17px; margin-top:20px; line-height:1.5;}
+  .hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<div id="hero" class="hero">
+  <div class="hero-stage">
+    <pre class="hand left" id="handL">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                              t::;888888G81
+                                                                         88 808 8CG G; 8 8;8088880t   88808
+                                                                    8l8;8i8 8 8,         8 G 8 G8     8,ii818888;
+                                                                 ;8G8 8:8 8 i     l ,0 8 8 808tL8 8 0 8 8t8   888881888
+                                                              8 8 8 8                      8 8   88 8 8 8 8 8 8 8:8,8;888i8 l
+                                                           ,88L,8 0                            t8L888   8 8       8 8l8;8C8888888888888  8;1
+                                                t888888G88888 8 8                       t    : if;0 8 L 8 8         8   8;8 888888888:G8C8888888888888888
+                                        l 8 88888      0:8818 8                              C     f  8 8 8                 C888f8CL88888888       888888888
+                                      88880C8   1 8   C G   8 8 8 8 G   1                             8 ; 8 0 C                  8:88    ;8f888808L8,8   8888
+                                 8;f C81                                  8   ;   8f   8                8 t 8 8                    i818  8ff0 8L888L088 88l8G8t
+                              818Cl8                        8 8  i8:8 888 l 8 8 G   18                    8 8 8                        8         0 L       88888
+                           88   C                       0   8 8:8888888888888888880f88                      C 8                          L:           :  i888888888
+                         8 8       0                  8 8C8L8888888888 88888888888888888 8                    8 8                        C            8,G  188 088888888
+                    ,188 8    8               8  ,C8888888888 8;8C8,8 8,8t8;f0888081,888G8;8                    8 8                      8  8             0    G 8C808888888
+              1 :;8 f8   8 8   8G8 88   8 ,1888  t80880Lt  88G8i8,8 8   fL,i: 8 888808l8;888L  :l               L 8 8        ::  ;G i 8                          ;88 88888888888
+        t 8 8 8 8                     8,f,1                 8G8 8 8 808l888888888888888808,888 ,:                 L 8 8      8L80888888818 808L                      88,8C8:888888888
+     88:8 8                                   8       G   888:8   11888,88888G8l888L888888G888  :                 ; 1 8f8    L8888888888888888     8                    0 8;8808888888880
+ 8 8l   ;         8                           8   88C  :8 8:8 0 8C88888G8t818 8 8C8G8888888888f  ,8                   8,8l  8888888888888888     888 8                        :i88C 8:8888
+                                                      8 ;88 8 8 8L8G8 1 888:,:8888888888888888 G    8   8                t8 8l:88888888888;   888888l        8888G0               L,,088888
+                    8                           G    8 88 8  :88888 8 8188888888888888888888t888,       8   f                iL8i8 8888L8 8i88888888888888880888888            G8:  8:888888
+                                               ,8 808 888 8l888   8 888888888888888880;l       88     f 888    8  L               8L888888888888888888888888888888G8888888888888          8G8,
+                        G                      8: 188t888888f 8   1;888888888L8888G             8;8     8 888  :, 8               C888888888888888888888888888888888888888888888t8  G,    88888;
+                                        ;  :8 8i8 8888888:8G8 8;888888888888888L                 G8 8   08L;8   8;8i              88888888       88888888t888888888808888888888888   8      88888
+                                           888i i:88888:8 8   80888880 8888888                      8 8   8 88i  0808             888888888      8888888888888888888888888888888888C888L      88888
+                                      L  L888 8 8888888 8 8l8888888888888888                          8 8    ;8;1:8 888          f8 88l 8888     888;C88888f888888888888888 888888888188888 :,88888                          
+                    G                      l  f8888  :8;8188888088888888888                             888   8C80i8G8;          t   t;8G88888    8888888888888888888888888888888888 888;8888  08888                     
+                    8            8    888C8G8G888  0888888888088888888888                                 L,8888888888888 8 8  8    G8,8:88888888 8C8L8888888 ;888888888888:888888888 L888888 0  8888               
+                            t    8 L      888C8 L  f88888L8888888888880                                           1 Liff88888888 l      ,    C888888888C888880  ,8f888888888888888888C    8,8,8  ;8888            
+                G,   :8 8   8,88tl 8   88888088 8  880888L88888888888                                                      i8888t88l        8i8888888888888888    8888888888888 888888    ;L8:8    8888           
+                                 : 88081C 8G8C8 888i888888888888888                                                               8G8;        8i8  88888888888     8888888888;88888888t     888 8;8, 888,         
+        8                8 8 8t8;8C8 8 88888818888888888888888888                                                                   8f;88:8 8 8      f 888888        8888888:G88C888888      888808f C888,          
+    f                 i    fi ;;G88888t888i888888f8888888888808                                                                        88,8 8L8    8f8  0 8888        88888888888888888        8888 888888              
+   1;             8 ;88   l8  88;8 8 l 8888 i8888888888888888                                                                             8C:8    0801888  8l88       808888888888888888        :88888888f
+            1 8 8 8 8 8L8888888808L8088l8888888888888t8 8:8                                                                                :888    8 G888Ci8 888       88888888 8i888888
+            i     i :  :G tG ,88:8 8i888888G888888888888;                                                                                     888f 8888 8C 88888        8888888888888888
+     0    8 8 8 8 8 888G888888888888 8888888888888888;                                                                                         88888888 8  l18818        ,8888888C888888,
+          ,       8 8 8 8 C8 8l0;8i8 8;;8f888888888                                                                                            888888888,8   , 88         88888888888888
+   8f  ;8   8   8,8 8l888L88 8880888t8;88888888G0                                                                                              888888888888808888         88888888888888
+       :i   0   8 l 8 8880888888 8 8 8888 888                                                                                                  8888888 Lf888888f          8;8888,88888808:
+          8 8 8 8 8 8 888L8888G8:8:8 88888                                                                                                     8888881     888            ;88888; 8888 888
+        8   8 8 8   8 88888888t8880888l                                                                                                          888C                       88888   888808
+          8   8 8 8 8 888i888 888  8                                                                                                                                          :8     8 88
+        i 0  ;8i8 8 8 88888888G8t
+   8:  8;  ;8 8 8, i8 8L88t8 8
+ 8 8081  G8G88888:l88 8,88
+   lt  08 ,G8;8:8L888G8:
+ 8 8088880888888888,8
+ 8:8 0t88 8 8l888L0
+ t 888G88 888,8
+   t;8L88L88;
+   8;8i8888
+   8888
+ 88
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ,
+
+
+
+
+
+
+          ,
+
+
+ ;
+ ,
+
+
+ ,,       ,
+
+            ,:
+                 ,
+       ,</pre>
+    <pre class="hand right" id="handR">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                                                                                         L
+                                                                                                                                                                                                                  8f88 l
+                                                                                                                                                                                                            : 8 8 8   ;1
+                                                                                                                                                                                                        8 8 8 G 8,
+                                                                                                                                                                                                   8  8 8   8
+                                                                                                                                                                                              , 8 88   8
+                                                                                                                                                                                          , 8 8,0 88:G
+                                                                                                                                                                                   8 088888 8 8 8 :
+                                                                                                                                                    8 8 8888;;80  8 ,     ;888 8 8 f ; ;,:;   8
+                                                                                                                                              808,8 8 8 8:;,88  8,  8;8L8 L  8   8 8 ; ;l
+                                                                                                                                      ,0888 8:8G8           1t8L8 8 8 f
+                                                                                                                               G08888808,   8                                f
+                                                                                                                           8G8t, 8 f l  ;i                            f  88:f      8   8:
+                                                                                                         8 8 8t8L8f8  , 888  ,81f                               :                  t
+                                                                                                  8;8888i8;8 8 8 8 8;8881 f088                        8  L   8 :  G 8 8
+                                                                                          lC08f8888   ,888  8  8,8   8   8:             G i         8 l    L  C8                                                    ,
+                                                                                      f88i888:C8  8                  8                    8 8  C8 8 8   8 88888,                                                    1      8
+                                                                                 ft8i888  ,8                         8f8;             ;8L08 88818i8 8 8 8:  G                                                     0:
+                                                 ,                         :  8CL8          f,                     t 8 :          8GC8 :8,0 888 8,8 8   8 0   8l8:                                                1
+                                      ,818888L 888888888       8;88888880888 8 8,  8::     8                       8 lf8C      8 8888 G8  8:8t8 818 8 8 8l8 888:t   8 8  Ci      8    8                         81
+                                 ;8 888:  C:88:0      ,8L8888888L8   8;8;8     Gf0                               ; 8   888 8;L88 8    ;, L8 888t8 8 8i8,8f8   L 8 8                                         :   8
+                        ,;88888G8088:     8:8              L            :i,G,8 8 8,8:t88t8                           8 8888888888 t   L:8,8 8t8:8L8 8 8     L                               8       1l    8 8
+                     88i88   8          ,L808              f                 ;       808                  8           88888888888    88 t 8 8 8888888f8;8                                                 8
+               f88888 G               1:8 888f8:    8088:8 l             8 8 8L818l88888         ,8                8 8 8L88888881:1888G 8 8,8           f88888080t8:8:8          8 8 8 t888f8   8      8
+             ;8 8           8C8 8 01888888888888888888L ,8 8       8      1888888888888                 8          8 088888888888G88t818    t ; ff808;8l8888888880G 8   8,G888;    f G      8 8 8      8
+             f8          88l8C8L8888888888888888888L888888:8       88;    l888888888                 8           81L 888888888888888t ,G888 88888888888L888888888l8 8 8;8 8  8;8 8,: L880   , ,   88 8 8        8 f Gl
+              80888888888888888888888888888   0888888888888888      888    8888888;               8 l          8 8 818  8888888888888888888C8f8  8L8    GC ;G888818;8,8:8;888818 8 8 8G8G 8 8 8   f8 8    8     0
+                888888888888888l   0G               8 f8888888881888 888l8   8888              88:8             ,8 8 888888888888888888G8f8;808;88888 8,8 81;l8t        t  , 8t8   8   8fi8   8 8L81:8
+                    1,8LL:                                   8 88888888888880881              ;i888          8 8 8 88888888888888  88; 8888 888888888188888 888   8 8   8    8 , 8 8 88G888 8 8,8888 8 8, 8 8 L
+                                                               888888888:88888t              8 88888 l     L 8 8t8f,t 8888888888888888888888888888888 818888888   8 8 8 8 88   8 : 8 8;88G8;8 88888888 88G8 L0808t8t88  Ct 0
+                                                                C88808 88888             8 ; 8888888 8 1 ,,8 8 8 888888888888888888 8888888888888888888 8i88888G8G888:8 8 8L:8,8i8 8 888 t8 80888,8888888 8 8 8 8,8l88  88 8
+                                                               8888888 8L               t8G888880;88:8888888888888888;88888888888888888888888888888 8t8L888 i8G;;,8 8   8l0880,80  8:8L8888:8t888818 t t8 8 8 8   8,;i:8   8
+                                                             88888888            81808888888888888888888L88888888G8888888888888888888             818f888;888888888,8,8L8:88L8 888t8 8i888888 8 8,8:888f8 8 8l8 888i88;888 8
+                                                           8181f    ; 8       8lG888888888888888888888l8888888888888888888888888888;                      88  888C8;8,8f8  8 0 8:8 8888888888C8 8888888 8 8 8;8     ,l     ,
+                                                       Ll888 8 8    i :8   888888888888888888888888888888888888888888888888888888                               1;8,8 8f8888888888C8;8888888888L888G888i8,8 8:818f80888888
+                                                    88888888    8    8 80888888888fL     ;L8888888888888881888888888888888888 ;                                                  , , G:88  L8 ; L ; 8G  8;8 8 8f818888 888L8
+                                                  88L         88,  8C88188888888           888i  i88888888888888888888888888:                                                                                 8 808G8888C888
+                                                  88C8     G 08   :888888888t88888G         ,8888      8L8,88888888888888
+                                                  88 :8   8f 0    ;888888G  18880888         88888f    ,   8 8G8888888t;
+                                                   888f888 8   :88888888    :888888888          88888     8888888888
+                                                    8l888888888888C88;    8 888888 888888888   080888808 888888888
+                                                       8 8888888888088;  88888888  88   888888888888888888  1
+                                                      18 8 8888888:888888888 88    8    888888881 t 8808
+                                                      88 8 8G88G88G  88888888     80  0,888888
+                                                      8C   L88888      8f88      88 88888888:
+                                                     88    888888    8C8888     888888888888
+                                                     88f0888888 8    88C88l      888888888f
+                                                     888f8888888 L888:88,8      0888888888
+                                                     881  88888;;88888888        8l8LC8888
+                                                      8    88888   88888         8 ;  8888
+                                                       8 f 88888ii  8888         8      88f
+                                                       8   88888    8888         81   1;88
+                                                       8 f 88888  f8888          :88 L8 8
+                                                       8 88888888 8888             8t88
+                                                       8888888,  8888
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                                                                   ,              :,</pre>
+  </div>
+  <h1 class="hero-title">Information <span class="off">Asymmetry</span></h1>
+</div>
+<div class="hero-spacer"></div>
+
+<div class="col">
+
+  <!-- ===== I ===== -->
+  <section class="step shown" id="m1">
+    <p class="lead"><span class="num">I</span>We are building infrastructure to dissolve <em>information asymmetry</em>: the gap that opens whenever one party knows something another would benefit from, and the two never connect. It is an old, almost invisible problem, and it quietly wastes an enormous amount of the world's effort.</p>
+    <p class="aside">It is the largest economy nobody can see: the things that were never made.</p>
+    <div class="reveal-wrap"><button class="reveal" data-target="m2">Continue<span class="arr">↓</span></button></div>
+  </section>
+
+  <!-- ===== II ===== -->
+  <section class="step" id="m2">
+    <div class="movement">
+      <p class="lead"><span class="num">II</span>The shape is always the same. Both sides would be better off after the exchange, and yet the exchange simply never happens. <span class="verm">Do not take my word for it. Play it.</span></p>
+    </div>
+    <div class="reveal-wrap"><button class="reveal play" data-target="game">Play the scenario</button></div>
+  </section>
+
+  <!-- ===== the scripted game-theory scenario ===== -->
+  <section class="step" id="game">
+    <figure>
+      <div class="scard">You are <b>Helix Bio</b>. Two years ago your lead compound, <em>HX-04</em>, failed its trial and went on the shelf. You suspect it could work for a different disease, but you are missing the one dataset that would prove it. Somewhere, a lab is sitting on exactly that data and has no idea it is worth anything to anyone. A deal would rescue you both. But to go looking, you would have to reveal that HX-04 failed and what you are now chasing. <span class="verm">Do you?</span></div>
+
+      <div class="meters">
+        <div class="cell"><div class="clabel">Public sentiment</div>
+          <div class="mval" id="sentVal"><span id="sentN">100</span><span class="pct">%</span></div>
+          <div class="track"><div class="fill" id="sentBar"></div></div></div>
+        <div class="cell"><div class="clabel">Rivals racing you</div>
+          <div class="mval" id="rivVal"><span id="rivN">0</span></div></div>
+        <div class="cell"><div class="clabel">Value captured</div>
+          <div class="vrow"><span class="vlab">Helix</span><span class="vval" id="vHelix">$0</span></div>
+          <div class="vrow"><span class="vlab">The lab</span><span class="vval" id="vLab">$0</span></div></div>
+      </div>
+
+      <div id="cascade"></div>
+
+      <div class="choice" id="choice">
+        <span class="ymove">Your move</span>
+        <button class="b-choice" id="bCall">Make the call</button>
+        <button class="b-choice" id="bQuiet">Keep it quiet</button>
+      </div>
+
+      <div class="deploy hidden" id="deploy">
+        <p>Whichever you chose, the deal that would have helped you both never formed. There is no safe first move. So stop moving first.</p>
+        <button class="b-deploy" id="bDeploy">Deploy agents instead →</button>
+      </div>
+
+      <div class="deal hidden" id="deal">
+        <div class="deal-h">An agent surfaced a deal</div>
+        <div class="deal-b">
+          <p>A lab three time zones away holds a dataset that revives HX-04 for a rare fibrotic disease. It is dead weight on their books. They will license it to you for <b>$500k</b>.</p>
+          <div class="ledger">
+            <div class="lrow"><span>License cost</span><span class="neg">- $0.5M</span></div>
+            <div class="lrow"><span>Revived HX-04 program, expected</span><span>+ $9.5M</span></div>
+            <div class="lrow net"><span>Net to Helix</span><span class="net-v">+ $9.0M</span></div>
+          </div>
+          <div class="dnote">For them, a dead dataset becomes $0.5M up front, plus milestones. Both sides come out ahead.</div>
+          <div class="deal-btns"><button class="b-buy" id="bBuy">Buy the license</button><button class="b-pass" id="bPass">Pass</button></div>
+        </div>
+      </div>
+
+      <button class="b-reset hidden" id="bReset">← Run it again</button>
+
+      <figcaption>Played straight, there is no safe first move. The agents never need one. They search over what can be inferred, and the secret moves only at the very end, inside a deal both sides have already agreed to.</figcaption>
+    </figure>
+    <div class="reveal-wrap"><button class="reveal" data-target="m3">Why it happens<span class="arr">↓</span></button></div>
+  </section>
+
+  <!-- ===== III ===== -->
+  <section class="step" id="m3">
+    <div class="movement">
+      <p class="lead"><span class="num">III</span>The intuitive answer is that people can't find each other. That is downstream of something sharper. Two forces hold these exchanges shut, and most people conflate them.</p>
+      <h2>Searching is itself dangerous.</h2>
+      <p>To go looking, you must describe what you are working on, and for a company, a fund, or a lab, that description is exactly the thing they cannot afford to reveal. <span class="verm">Your query is your position.</span> So the rational move is not to look, and the match dies before anyone goes looking.</p>
+      <h2>Revealing is the same act as giving away.</h2>
+      <p>To prove that what you know is worth paying for, you typically have to show it, and once you have shown it, the other side no longer needs to buy it. So even when two parties find each other, the more valuable the secret, the less either can afford to show their hand first. Everyone stays quiet.</p>
+      <p>This is why the obvious fixes fail. A public registry only helps the holder who doesn't mind revealing, and the moment they mind, nobody posts, because posting <em>is</em> the leak. Encryption secures an exchange once both parties have already found each other. Neither helps anyone discover the trade was possible. <span class="verm">The hard part was never securing the exchange. It was finding it without anyone exposing themselves to look.</span></p>
+    </div>
+    <div class="reveal-wrap"><button class="reveal" data-target="m4">The approach<span class="arr">↓</span></button></div>
+  </section>
+
+  <!-- ===== IV ===== -->
+  <section class="step" id="m4">
+    <div class="movement">
+      <p class="lead"><span class="num">IV</span>We build models of institutions: simulations of what an organization likely holds, lacks, and would trade, inferred from everything it already reveals in public. What it publishes, what it builds, what it hires for, where it is clearly investing. From that exhaust you can form a surprisingly specific hypothesis about what a lab is bottlenecked on, or what a company is sitting on and not using.</p>
+      <p>Inside that model, agents run the exchanges privately. They search the network for pairs that fit, price and negotiate the promising ones, and explore every version of a deal without any real position being placed at risk. Only the matches that leave both sides genuinely better off are ever surfaced to the people involved. Everything else dissolves, and neither party need ever know a search took place.</p>
+      <p>A human broker can hold maybe a dozen relationships in their head, and must be told everyone's secrets to work. Agents search thousands of possible matches at once, over what can be inferred, not deposited. <span class="verm">The secret moves only at the very end, inside a deal both sides have already agreed to, never as the price of finding out a deal exists.</span></p>
+    </div>
+    <div class="reveal-wrap"><button class="reveal" data-target="m5">What it is not for<span class="arr">↓</span></button></div>
+  </section>
+
+  <!-- ===== V ===== -->
+  <section class="step" id="m5">
+    <div class="movement">
+      <p class="lead"><span class="num">V</span>We do not try to dissolve every asymmetry, because some shouldn't be and structurally can't be. Some information is leverage, held precisely because the other side not knowing is your advantage. A reservation price. A flaw hidden in a deal. The cards you hold where the other party's loss is your gain.</p>
+      <p>There is no honest technology that makes those exchanges happen, and any company claiming otherwise is selling something. <span class="verm">A faithful agent working for someone who benefits from the gap will, correctly, protect the gap.</span></p>
+    </div>
+    <div class="reveal-wrap"><button class="reveal" data-target="m6">Close<span class="arr">↓</span></button></div>
+  </section>
+
+  <!-- ===== VI ===== -->
+  <section class="step" id="m6">
+    <div class="movement">
+      <p class="close"><span class="num" style="font-size:.6em; vertical-align:.22em">VI</span>Most of the value in the world is the value that was never created. The work done twice, the discovery reached alone, the help that never arrived.</p>
+      <p class="close-it">We are building the thing that finds it.</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// ---- hero: hands part on scroll, then the manifesto is revealed ----
+(function(){
+  const hero = document.getElementById('hero');
+  const hL = document.getElementById('handL'), hR = document.getElementById('handR');
+  function onScroll(){
+    const p = Math.min(1, window.scrollY / (window.innerHeight * 0.85));
+    hL.style.transform = `translate(${-p*70}vw,-50%)`;
+    hR.style.transform = `translate(${p*70}vw,-50%)`;
+    hero.style.opacity = String(Math.max(0, 1 - p*1.1));
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  onScroll();
+})();
+
+// ---- progressive reveal ----
+document.querySelectorAll('.reveal').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const el = document.getElementById(btn.dataset.target);
+    el.classList.add('shown');
+    btn.parentElement.style.display = 'none';
+    setTimeout(()=> el.scrollIntoView({behavior:'smooth', block:'start'}), 60);
+  });
+});
+
+// ---- scripted scenario controller ----
+(function(){
+  const $ = id => document.getElementById(id);
+  const AGENT_MATCHES = 4217;
+  const timers = [];
+  function clearTimers(){ timers.forEach(clearTimeout); timers.length = 0; }
+  function wait(fn, ms){ const t = setTimeout(fn, ms); timers.push(t); return t; }
+  function show(id){ $(id).classList.remove('hidden'); }
+  function hide(id){ $(id).classList.add('hidden'); }
+
+  function countTo(el, target, dur, fmt){
+    const start = performance.now();
+    const from = parseFloat((el.textContent || '0').replace(/[^0-9.\-]/g, '')) || 0;
+    function step(now){
+      let t = Math.min(1, (now - start) / dur); t = 1 - (1 - t) * (1 - t);
+      const v = Math.round(from + (target - from) * t);
+      el.textContent = fmt ? fmt(v) : v;
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function appendBeat(html, tone){
+    const d = document.createElement('div');
+    d.className = 'beat' + (tone ? ' ' + tone : '');
+    d.innerHTML = html;
+    $('cascade').appendChild(d);
+    requestAnimationFrame(()=> requestAnimationFrame(()=> d.classList.add('in')));
+    return d;
+  }
+
+  function setSentiment(v){
+    countTo($('sentN'), v, 700);
+    const neg = v < 90;
+    $('sentBar').style.width = v + '%';
+    $('sentBar').classList.toggle('neg', neg);
+    $('sentVal').classList.toggle('neg', neg);
+  }
+  function setRivals(v){ countTo($('rivN'), v, 700); $('rivVal').classList.toggle('neg', v > 0); }
+  function resetMeters(){
+    $('sentN').textContent = '100'; $('sentBar').style.width = '100%';
+    $('sentBar').classList.remove('neg'); $('sentVal').classList.remove('neg');
+    $('rivN').textContent = '0'; $('rivVal').classList.remove('neg');
+    $('vHelix').textContent = '$0'; $('vLab').textContent = '$0';
+    $('vHelix').classList.remove('gain'); $('vLab').classList.remove('gain');
+  }
+
+  function playBeats(beats, done){
+    let i = 0;
+    (function next(){
+      if (i >= beats.length){ done && done(); return; }
+      const b = beats[i++];
+      appendBeat(b.html, b.tone);
+      if (b.after) b.after();
+      wait(next, b.gap || 1150);
+    })();
+  }
+
+  function begin(){ clearTimers(); $('cascade').innerHTML = ''; resetMeters(); hide('deploy'); hide('deal'); hide('bReset'); }
+
+  $('bCall').onclick = ()=>{
+    begin();
+    playBeats([
+      {html:`You post a partnering call: <em>Helix is seeking data to repurpose HX-04.</em>`},
+      {html:`The press reads it as failure. "Helix's lead program is dead." `, after:()=>setSentiment(78)},
+      {html:`Rivals infer which disease you are betting on and start racing you to it. Your head start evaporates.`, after:()=>setRivals(2)},
+      {html:`The lab sitting on the data you need now sees how badly you need it. Your leverage is gone.`},
+      {html:`<strong>You revealed your position and captured none of the value.</strong> The market punished you, rivals are racing, and the quiet $500k deal you might have struck is gone.`, tone:'bad'},
+    ], ()=> show('deploy'));
+  };
+
+  $('bQuiet').onclick = ()=>{
+    begin();
+    playBeats([
+      {html:`You say nothing. HX-04 stays in the cabinet, carried at $0.`},
+      {html:`The lab that needs it keeps searching blind. Year one.`},
+      {html:`Year two. Neither of you ever learns the other exists.`},
+      {html:`<strong>Safe, and worthless.</strong> The treatment that could have existed does not. The value dies in silence.`, tone:'bad'},
+    ], ()=> show('deploy'));
+  };
+
+  $('bDeploy').onclick = ()=>{
+    begin(); hide('choice');
+    playBeats([
+      {html:`Agents model both firms from public exhaust: patents, trial registries, job posts, papers. No one is asked to reveal anything.`},
+      {html:`Inferred: Helix needs one dataset to revive a shelved asset. A distant lab is sitting on exactly that data, unused.`},
+      {html:`They negotiate privately over the models. <strong id="matchN">0</strong> versions of the deal explored. No public call. No leak. No tip-off.`,
+       gap:1800, after:()=> countTo($('matchN'), AGENT_MATCHES, 1600, v=> v.toLocaleString('en-US'))},
+      {html:`One match clears the bar. The agent brings you terms.`},
+    ], ()=> show('deal'));
+  };
+
+  $('bBuy').onclick = ()=>{
+    hide('deal');
+    $('vHelix').textContent = '+$9.0M'; $('vHelix').classList.add('gain');
+    $('vLab').textContent = '+$0.5M'; $('vLab').classList.add('gain');
+    appendBeat(`<strong>Done. HX-04 is alive again.</strong> You captured $9.0M that was sitting in two cabinets on opposite sides of the world, and they turned a dead asset into revenue. Neither of you ever had to reveal a thing to find it.`, 'good');
+    show('bReset');
+  };
+
+  $('bPass').onclick = ()=>{
+    hide('deal');
+    appendBeat(`<strong>You passed on $9.0M of free value,</strong> and HX-04 dies in both cabinets anyway. Which is the whole point: when a deal only helps you, the only thing that ever stood in the way was finding it.`, 'bad');
+    show('bReset');
+  };
+
+  $('bReset').onclick = ()=>{ begin(); show('choice'); };
+})();
+</script>
+</body>
+</html>

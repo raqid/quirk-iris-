@@ -1,0 +1,12 @@
+- papers/repos:
+    - https://github.com/vinid/negotiationarena
+    - https://github.com/yasserfarouk/negmas
+    - https://arxiv.org/abs/1706.05125
+    - https://arxiv.org/abs/2402.05863
+    - https://arxiv.org/abs/2309.17234
+    - https://arxiv.org/abs/2502.16242
+    - https://arxiv.org/abs/2602.18230
+    - https://arxiv.org/abs/2506.00073
+    - https://github.com/zkonduit/ezkl
+    - https://github.com/tobinsouth/VerifiableEvals
+    - https://arxiv.org/abs/2508.08544v1

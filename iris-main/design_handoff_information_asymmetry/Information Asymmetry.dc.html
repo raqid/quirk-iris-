@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  body{ background:#E9E1CE; }
+  ::selection{ background:#9E3413; color:#EFE8D7; }
+</style>
+</helmet>
+
+<div style="position:relative; width:100%; min-height:100vh; background:#E9E1CE; color:#2A2118; font-family:'EB Garamond',Georgia,serif; overflow:hidden;">
+
+  <sc-if value="{{ grain }}" hint-placeholder-val="{{ true }}">
+    <div style="position:fixed; inset:0; pointer-events:none; z-index:50; mix-blend-mode:multiply; opacity:.05; background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;);"></div>
+  </sc-if>
+
+  <article style="position:relative; z-index:10; max-width:660px; margin:0 auto; padding:clamp(64px,11vh,128px) clamp(26px,6vw,40px) clamp(96px,14vh,150px); font-size:20px; line-height:1.62;">
+
+    <h1 style="font-size:clamp(28px,4.4vw,38px); font-weight:500; line-height:1.18; letter-spacing:-0.01em; margin-bottom:clamp(40px,6vh,60px);">Information Asymmetry</h1>
+
+    <p style="margin-bottom:1.1em;"><span style="color:#9E3413; font-size:.82em; letter-spacing:.08em; margin-right:.55em; font-weight:500;">I</span>We are building infrastructure to fix <em>information asymmetry</em>: the gap that opens whenever one party knows something another would benefit from, and the two just never connect. It is an old, almost invisible problem that quietly wastes an enormous amount of the world's effort.</p>
+    <p style="margin-bottom:1.1em; color:#5C5040; font-style:italic;">This is the largest economy nobody can see: the things that were never made.</p>
+
+    <p style="margin-top:clamp(40px,6vh,68px); margin-bottom:1.1em;"><span style="color:#9E3413; font-size:.82em; letter-spacing:.08em; margin-right:.55em; font-weight:500;">II</span>The shape is always the same. Both sides would be better off after the exchange, but the exchange never happens. Do not take my word for it. Play it.</p>
+
+    <!-- ─────────── the scenario ─────────── -->
+    <figure style="margin:clamp(30px,5vh,52px) 0 0;">
+
+      <p style="font-size:17px; line-height:1.6; color:#3A3024; margin-bottom:22px; padding:18px 20px; background:#E3DAC4; border-left:2px solid #9E3413;">You are <strong style="font-weight:600;">Helix Bio</strong>. Two years ago your lead compound, <em>HX-04</em>, failed its trial and went on the shelf. You suspect it could work for a different disease, but you are missing the one dataset that would prove it. Somewhere, a lab is sitting on exactly that data and has no idea it is worth anything to anyone. A deal would rescue you both. But to go looking, you would have to reveal that HX-04 failed and what you are now chasing. <span style="color:#9E3413;">Do you?</span></p>
+
+      <!-- meters -->
+      <div style="display:grid; grid-template-columns:1.4fr .85fr 1.5fr; gap:1px; background:#C8BB9D; border:1px solid #C8BB9D; font-family:'IBM Plex Mono',monospace;">
+        <div style="background:#EAE2CD; padding:13px 14px;">
+          <div style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#8A7E66;">Public sentiment</div>
+          <div style="display:flex; align-items:baseline; gap:5px; margin-top:7px;">
+            <span ref="{{ sentNumRef }}" style="font-family:'EB Garamond',serif; font-size:25px; font-weight:500; color:#2A2118;">100</span>
+            <span style="font-size:11px; color:#8A7E66;">%</span>
+          </div>
+          <div style="height:3px; background:#D8CDB2; margin-top:9px;"><div ref="{{ sentBarRef }}" style="height:100%; width:100%; background:#2A2118; transition:width .6s ease, background .6s ease;"></div></div>
+        </div>
+        <div style="background:#EAE2CD; padding:13px 14px;">
+          <div style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#8A7E66;">Rivals racing you</div>
+          <div ref="{{ rivalNumRef }}" style="font-family:'EB Garamond',serif; font-size:25px; font-weight:500; color:#2A2118; margin-top:7px;">0</div>
+        </div>
+        <div style="background:#EAE2CD; padding:13px 14px;">
+          <div style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#8A7E66;">Value captured</div>
+          <div style="margin-top:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;">
+              <span style="font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:#8A7E66;">Helix</span>
+              <span ref="{{ valYouRef }}" style="font-family:'EB Garamond',serif; font-size:19px; font-weight:500; color:#8A7E66;">$0</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-top:3px;">
+              <span style="font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:#8A7E66;">The&nbsp;lab</span>
+              <span ref="{{ valLabRef }}" style="font-family:'EB Garamond',serif; font-size:19px; font-weight:500; color:#8A7E66;">$0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- cascade log -->
+      <div ref="{{ cascadeRef }}" style="margin-top:22px; display:flex; flex-direction:column; gap:13px; min-height:24px;"></div>
+
+      <!-- choice -->
+      <div ref="{{ choiceRef }}" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:24px;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#8A7E66;">Your move</span>
+        <button onClick="{{ onReveal }}" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; padding:10px 20px; border:1.5px solid #2A2118; background:transparent; color:#2A2118; cursor:pointer;" style-hover="background:#2A2118; color:#E9E1CE;">Make the call</button>
+        <button onClick="{{ onHold }}" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; padding:10px 20px; border:1.5px solid #2A2118; background:transparent; color:#2A2118; cursor:pointer;" style-hover="background:#2A2118; color:#E9E1CE;">Keep it quiet</button>
+      </div>
+
+      <div ref="{{ deployRef }}" style="display:none; margin-top:20px; padding-top:20px; border-top:1px solid #C8BB9D;">
+        <p style="font-size:16.5px; line-height:1.55; color:#3A3024; margin-bottom:16px;">Whatever you chose, the deal that would have helped you both never formed. There is no safe first move. So stop moving first.</p>
+        <button onClick="{{ onDeploy }}" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; padding:11px 22px; border:1.5px solid #3F7350; background:transparent; color:#3F7350; cursor:pointer;" style-hover="background:#3F7350; color:#EFE8D7;">Deploy agents instead &#8594;</button>
+      </div>
+
+      <!-- the deal an agent surfaces -->
+      <div ref="{{ dealRef }}" style="display:none; margin-top:22px; border:1px solid #3F7350; background:#E7E8DD;">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#3F7350; padding:12px 18px; border-bottom:1px solid #CBD0BD;">An agent surfaced a deal</div>
+        <div style="padding:18px 18px 20px;">
+          <p style="font-size:17px; line-height:1.58; color:#2A2118; margin-bottom:18px;">A lab three time zones away holds a dataset that revives HX-04 for a rare fibrotic disease. It is dead weight on their books. They will license it to you for <strong style="font-weight:600;">$500k</strong>.</p>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:#2A2118;">
+            <div style="display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid #CBD0BD;"><span>License cost</span><span style="color:#9E3413;">- $0.5M</span></div>
+            <div style="display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid #CBD0BD;"><span>Revived HX-04 program, expected</span><span>+ $9.5M</span></div>
+            <div style="display:flex; justify-content:space-between; padding:9px 0 0; font-weight:500;"><span>Net to Helix</span><span style="color:#3F7350;">+ $9.0M</span></div>
+          </div>
+          <p style="font-size:14px; line-height:1.5; color:#5C5040; margin-top:16px;">For them, a dead dataset becomes $0.5M up front, plus milestones. Both sides come out ahead.</p>
+          <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:18px;">
+            <button onClick="{{ onBuy }}" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; padding:11px 22px; border:1.5px solid #3F7350; background:#3F7350; color:#EFE8D7; cursor:pointer;" style-hover="background:#34603F;">Buy the license</button>
+            <button onClick="{{ onPass }}" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; padding:11px 22px; border:1.5px solid #B7AE94; background:transparent; color:#8A7E66; cursor:pointer;" style-hover="border-color:#2A2118; color:#2A2118;">Pass</button>
+          </div>
+        </div>
+      </div>
+
+      <div ref="{{ resetRef }}" style="display:none; margin-top:20px;">
+        <button onClick="{{ onReset }}" style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; padding:8px 16px; border:1px solid #C8BB9D; background:transparent; color:#5C5040; cursor:pointer;" style-hover="border-color:#2A2118; color:#2A2118;">&#8592; Run it again</button>
+      </div>
+
+      <figcaption style="margin-top:24px; color:#5C5040; font-style:italic; font-size:17px; line-height:1.55;">Played straight, there is no safe first move. The agents never need one. They search over what can be inferred, and the secret moves only at the very end, inside a deal both sides have already agreed to.</figcaption>
+    </figure>
+
+    <p style="margin-top:clamp(44px,7vh,76px); margin-bottom:1.1em;"><span style="color:#9E3413; font-size:.82em; letter-spacing:.08em; margin-right:.55em; font-weight:500;">III</span>The intuitive answer is that people can't find each other. That is downstream of something sharper. Two forces hold these exchanges shut, and most people conflate them.</p>
+
+    <h2 style="font-size:clamp(21px,2.6vw,25px); font-weight:500; line-height:1.25; margin:clamp(26px,4vh,36px) 0 .5em;">Searching is itself dangerous.</h2>
+    <p style="margin-bottom:1.1em;">To ask the world <em>who has what I need?</em> you must describe what you are working on, and for a company, a fund, or a lab, that description is exactly the thing they cannot afford to reveal. Your query is your position. So the rational move is not to look, and the match dies before anyone goes looking.</p>
+
+    <h2 style="font-size:clamp(21px,2.6vw,25px); font-weight:500; line-height:1.25; margin:clamp(26px,4vh,36px) 0 .5em;">Revealing is the same act as giving away.</h2>
+    <p style="margin-bottom:1.1em;">To prove that what you know is worth paying for, you typically have to show it, and once you have shown it, the other side no longer needs to buy it. So even when two parties find each other, the more valuable the secret, the less either can afford to show their hand first. Everyone stays quiet.</p>
+
+    <p style="margin-top:1.4em; margin-bottom:1.1em;">This is why the obvious fixes fail. A public registry only helps the holder who doesn't mind revealing, and the moment they mind, nobody posts, because posting <em>is</em> the leak. Encryption secures an exchange once both parties have already found each other. Neither helps anyone discover the trade was possible. <span style="color:#9E3413;">The hard part was never securing the exchange. It was finding it without anyone exposing themselves to look.</span></p>
+
+    <p style="margin-top:clamp(44px,7vh,76px); margin-bottom:1.1em;"><span style="color:#9E3413; font-size:.82em; letter-spacing:.08em; margin-right:.55em; font-weight:500;">IV</span>We build models of institutions: simulations of what an organization likely holds, lacks, and would trade, inferred from everything it already reveals in public. What it publishes, what it builds, what it hires for, where it is clearly investing. From that exhaust you can form a surprisingly specific hypothesis about what a lab is bottlenecked on, or what a company is sitting on and not using.</p>
+    <p style="margin-bottom:1.1em;">Inside that model, agents run the exchanges privately. They search the network for pairs that fit, price and negotiate the promising ones, and explore every version of a deal without any real position being placed at risk. Only the matches that leave <em>both</em> sides genuinely better off are ever surfaced to the people involved. Everything else dissolves, and neither party need ever know a search took place.</p>
+    <p style="margin-bottom:1.1em;">A human broker can hold maybe a dozen relationships in their head, and must be told everyone's secrets to work. Agents search thousands of possible matches at once, over what can be inferred, not deposited. The secret moves only at the very end, inside a deal both sides have already agreed to, never as the price of finding out a deal exists.</p>
+
+    <p style="margin-top:clamp(44px,7vh,76px); margin-bottom:1.1em;"><span style="color:#9E3413; font-size:.82em; letter-spacing:.08em; margin-right:.55em; font-weight:500;">V</span>We do not try to dissolve every asymmetry, because some shouldn't be and structurally can't be. Some information is leverage, held precisely because the other side <em>not</em> knowing is your advantage. A reservation price. A flaw hidden in a deal. The cards you hold where the other party's loss is your gain.</p>
+    <p style="margin-bottom:1.1em;">There is no honest technology that makes those exchanges happen, and any company claiming otherwise is selling something. A faithful agent working for someone who benefits from the gap will, correctly, protect the gap.</p>
+
+    <p style="margin-top:clamp(52px,8vh,90px); font-size:clamp(23px,3.2vw,30px); line-height:1.32; font-weight:500; color:#241E15; text-wrap:pretty;"><span style="color:#9E3413; font-size:.6em; letter-spacing:.08em; margin-right:.6em; font-weight:500; vertical-align:.22em;">VI</span>Most of the value in the world is the value that was never created. The work done twice, the discovery reached alone, the help that never arrived.</p>
+    <p style="margin-top:1em; font-size:clamp(20px,2.6vw,26px); line-height:1.35; font-style:italic; color:#9E3413;">We are building the thing that finds it.</p>
+
+  </article>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1080,&quot;height&quot;:2800},&quot;agentMatches&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:4217,&quot;min&quot;:200,&quot;max&quot;:20000,&quot;unit&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Game&quot;},&quot;grain&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Texture&quot;}}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.sentNumRef = React.createRef();
+    this.sentBarRef = React.createRef();
+    this.rivalNumRef = React.createRef();
+    this.valYouRef = React.createRef();
+    this.valLabRef = React.createRef();
+    this.cascadeRef = React.createRef();
+    this.choiceRef = React.createRef();
+    this.deployRef = React.createRef();
+    this.dealRef = React.createRef();
+    this.resetRef = React.createRef();
+  }
+
+  renderVals(){
+    return {
+      grain: this.props.grain !== false,
+      sentNumRef: this.sentNumRef, sentBarRef: this.sentBarRef,
+      rivalNumRef: this.rivalNumRef, valYouRef: this.valYouRef, valLabRef: this.valLabRef,
+      cascadeRef: this.cascadeRef, choiceRef: this.choiceRef,
+      deployRef: this.deployRef, dealRef: this.dealRef, resetRef: this.resetRef,
+      onReveal: () => this.play('reveal'),
+      onHold: () => this.play('hold'),
+      onDeploy: () => this.play('agents'),
+      onBuy: () => this.settle('buy'),
+      onPass: () => this.settle('pass'),
+      onReset: () => this.reset(),
+    };
+  }
+
+  componentWillUnmount(){
+    clearTimeout(this._beatTimer);
+    cancelAnimationFrame(this._meterRaf);
+  }
+
+  /* ---------- meters ---------- */
+  countTo(el, to, dur){
+    if (!el) return;
+    dur = dur || 700;
+    const from = parseInt((el.textContent || '0').replace(/[^0-9-]/g, ''), 10) || 0;
+    const start = performance.now();
+    const step = (now) => {
+      const t = Math.min(1, (now - start) / dur);
+      const e = 1 - Math.pow(1 - t, 2);
+      el.textContent = String(Math.round(from + (to - from) * e));
+      if (t < 1) this._meterRaf = requestAnimationFrame(step);
+    };
+    this._meterRaf = requestAnimationFrame(step);
+  }
+  setSent(v){
+    this.countTo(this.sentNumRef.current, v);
+    if (this.sentBarRef.current){
+      this.sentBarRef.current.style.width = v + '%';
+      this.sentBarRef.current.style.background = v < 90 ? '#9E3413' : '#2A2118';
+    }
+  }
+  setRivals(n){
+    this.countTo(this.rivalNumRef.current, n);
+    if (this.rivalNumRef.current) this.rivalNumRef.current.style.color = n > 0 ? '#9E3413' : '#2A2118';
+  }
+  setCap(ref, text, color){
+    if (ref.current){ ref.current.textContent = text; ref.current.style.color = color; }
+  }
+  resetMeters(){
+    if (this.sentNumRef.current) this.sentNumRef.current.textContent = '100';
+    if (this.sentBarRef.current){ this.sentBarRef.current.style.width = '100%'; this.sentBarRef.current.style.background = '#2A2118'; }
+    if (this.rivalNumRef.current){ this.rivalNumRef.current.textContent = '0'; this.rivalNumRef.current.style.color = '#2A2118'; }
+    this.setCap(this.valYouRef, '$0', '#8A7E66');
+    this.setCap(this.valLabRef, '$0', '#8A7E66');
+  }
+
+  /* ---------- beat scripts ---------- */
+  beats(path){
+    if (path === 'reveal') return [
+      { html: 'You post a partnering call: <em>Helix is seeking data to repurpose HX-04.</em>' },
+      { html: 'The press reads it as failure. \u201cHelix\u2019s lead program is dead.\u201d', fx: () => this.setSent(78) },
+      { html: 'Rivals infer which disease you are betting on and start racing you to it. Your head start evaporates.', fx: () => this.setRivals(2) },
+      { html: 'The lab sitting on the data you need now sees how badly you need it. Your leverage is gone.' },
+      { out: '#9E3413', html: '<strong style="font-weight:600;">You revealed your position and captured none of the value.</strong> The market punished you, rivals are racing, and the quiet $500k deal you might have struck is gone.' },
+    ];
+    if (path === 'hold') return [
+      { html: 'You say nothing. HX-04 stays in the cabinet, carried at $0.' },
+      { html: 'The lab that needs it keeps searching blind. Year one.' },
+      { html: 'Year two. Neither of you ever learns the other exists.' },
+      { out: '#9E3413', html: '<strong style="font-weight:600;">Safe, and worthless.</strong> The treatment that could have existed does not. The value dies in silence.' },
+    ];
+    return [
+      { html: 'Agents model both firms from public exhaust: patents, trial registries, job posts, papers. No one is asked to reveal anything.' },
+      { html: 'Inferred: Helix needs one dataset to revive a shelved asset. A distant lab is sitting on exactly that data, unused.' },
+      { html: 'They negotiate privately over the models. <span data-count style="font-family:\'IBM Plex Mono\',monospace; color:#3F7350;">0</span> versions of the deal explored. No public call. No leak. No tip-off.', gap: 1800, fx: (row) => { const c = row.querySelector('[data-count]'); this.countTo(c, parseInt(this.props.agentMatches, 10) || 4217, 1600); } },
+      { html: 'One match clears the bar. The agent brings you terms.' },
+    ];
+  }
+
+  /* ---------- run ---------- */
+  makeRow(b){
+    const row = document.createElement('div');
+    row.style.cssText = 'border-left:2px solid ' + (b.out || '#C8BB9D') + '; padding-left:14px; font-size:16.5px; line-height:1.5; color:' + (b.out ? '#2A2118' : '#3A3024') + '; opacity:0; transform:translateY(6px); transition:opacity .45s ease, transform .45s ease;';
+    row.innerHTML = b.html;
+    this.cascadeRef.current.appendChild(row);
+    requestAnimationFrame(() => { row.style.opacity = '1'; row.style.transform = 'none'; });
+    if (b.fx) b.fx(row);
+    return row;
+  }
+  runBeats(list, onDone){
+    clearTimeout(this._beatTimer);
+    cancelAnimationFrame(this._meterRaf);
+    if (this.cascadeRef.current) this.cascadeRef.current.innerHTML = '';
+    let i = 0;
+    const fire = () => {
+      if (i >= list.length){ if (onDone) onDone(); return; }
+      const b = list[i++];
+      this.makeRow(b);
+      this._beatTimer = setTimeout(fire, b.gap || 1150);
+    };
+    fire();
+  }
+
+  play(path){
+    clearTimeout(this._beatTimer);
+    cancelAnimationFrame(this._meterRaf);
+    this.resetMeters();
+    if (this.dealRef.current) this.dealRef.current.style.display = 'none';
+    if (this.resetRef.current) this.resetRef.current.style.display = 'none';
+    if (path === 'agents'){
+      if (this.choiceRef.current) this.choiceRef.current.style.display = 'none';
+      if (this.deployRef.current) this.deployRef.current.style.display = 'none';
+      this.runBeats(this.beats('agents'), () => { if (this.dealRef.current) this.dealRef.current.style.display = 'block'; });
+    } else {
+      this.runBeats(this.beats(path), () => { if (this.deployRef.current) this.deployRef.current.style.display = 'block'; });
+    }
+  }
+
+  settle(choice){
+    if (this.dealRef.current) this.dealRef.current.style.display = 'none';
+    if (choice === 'buy'){
+      this.setCap(this.valYouRef, '+$9.0M', '#3F7350');
+      this.setCap(this.valLabRef, '+$0.5M', '#3F7350');
+      this.makeRow({ out: '#3F7350', html: '<strong style="font-weight:600;">Done. HX-04 is alive again.</strong> You captured $9.0M that was sitting in two cabinets on opposite sides of the world, and they turned a dead asset into revenue. Neither of you ever had to reveal a thing to find it.' });
+    } else {
+      this.makeRow({ out: '#9E3413', html: '<strong style="font-weight:600;">You passed on $9.0M of free value,</strong> and HX-04 dies in both cabinets anyway. Which is the whole point: when a deal only helps you, the only thing that ever stood in the way was finding it.' });
+    }
+    if (this.resetRef.current) this.resetRef.current.style.display = 'block';
+  }
+
+  reset(){
+    clearTimeout(this._beatTimer);
+    cancelAnimationFrame(this._meterRaf);
+    if (this.cascadeRef.current) this.cascadeRef.current.innerHTML = '';
+    this.resetMeters();
+    if (this.dealRef.current) this.dealRef.current.style.display = 'none';
+    if (this.resetRef.current) this.resetRef.current.style.display = 'none';
+    if (this.deployRef.current) this.deployRef.current.style.display = 'none';
+    if (this.choiceRef.current) this.choiceRef.current.style.display = 'flex';
+  }
+}
+</script>
+</body>
+</html>
